@@ -1,28 +1,22 @@
 const { ethers } = require("hardhat");
 require("dotenv").config({ path: ".env" });
-const { WHITELIST_CONTRACT_ADDRESS, METADATA_URL } = require("../constants");
+const { CRYPTO_DEVS_NFT_CONTRACT_ADDRESS } = require("../constants");
 
 async function main() {
-  // Address of the whitelist contract that you deployed in the previous module
-  const whitelistContract = WHITELIST_CONTRACT_ADDRESS;
-  // URL from where we can extract the metadata for a Crypto Dev NFT
-  const metadataURL = METADATA_URL;
-  /*
-  A ContractFactory in ethers.js is an abstraction used to deploy new smart contracts,
-  so cryptoDevsContract here is a factory for instances of our CryptoDevs contract.
-  */
-  const cryptoDevsContract = await ethers.getContractFactory("CryptoDevs");
+  const cryptoDevsNFTContract = CRYPTO_DEVS_NFT_CONTRACT_ADDRESS;
 
-  // deploy the contract
-  const deployedCryptoDevsContract = await cryptoDevsContract.deploy(
-    metadataURL,
-    whitelistContract
+  const cryptoDevsTokenContract = await ethers.getContractFactory(
+    "CryptoDevToken"
   );
 
-  // print the address of the deployed contract
+  const deployedCryptoDevsTokenContract = await cryptoDevsTokenContract.deploy(
+    cryptoDevsNFTContract
+  );
+
+  await deployedCryptoDevsTokenContract.deployed();
+
   console.log(
-    "Crypto Devs Contract Address:",
-    deployedCryptoDevsContract.address
+    "Crypto Devs Token Contract Address:", deployedCryptoDevsTokenContract.address
   );
 }
 
